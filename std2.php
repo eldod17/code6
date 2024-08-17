@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة طالب جديد</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .form-container {
+            flex: 3;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .form-container label {
+            font-size: 16px;
+            color: #555;
+        }
+        .form-container input, .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-container button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+        .sidebar {
+            flex: 1;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            margin-left: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .student-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .student-table th, .student-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        .student-table th {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Form Container -->
+        <div class="form-container">
+            <h2>إضافة طالب جديد</h2>
+            <form action="add_student.php" method="post">
+                <label for="username">اسم المستخدم:</label>
+                <input type="text" id="username" name="username" required><br>
+
+                <label for="password">كلمة المرور:</label>
+                <input type="password" id="password" name="password" required><br>
+
+                <label for="role">الدور:</label>
+                <select id="role" name="role">
+                    <option value="student">طالب</option>
+                    <option value="admin">مدير</option>
+                </select><br>
+
+                <button type="submit">إضافة طالب</button>
+                
+            </form>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h3>بيانات الطلاب</h3>
+            <table class="student-table">
+                <tr>
+                    <th>اسم المستخدم</th>
+                    <th>الدور</th>
+                </tr>
+                // get_student_data.php
+
+<?php
+// إعدادات قاعدة البيانات
+$dbhost = "localhost";
+$dbname = "educational_platform";
+$dbuser = "root";
+$dbpass = "";
+
+// إنشاء الاتصال
+$conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+
+// التحقق من الاتصال
+if ($conn->connect_error) {
+    die("فشل الاتصال: " . $conn->connect_error);
+}
+
+// استرجاع بيانات الطلاب
+$query = "SELECT username, role FROM users2";
+$result = $conn->query($query);
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . htmlspecialchars($row["username"]) . "</td>";
+        echo "<td>" . htmlspecialchars($row["role"]) . "</td>";
+        echo "</tr>";
+    }
+} else {
+    echo "<tr>";
+    echo "<td colspan='2'>لا توجد بيانات للعرض.</td>";
+    echo "</tr>";
+}
+
+// إغلاق الاتصال
+$conn->close();
+?>
+                </table>
+            </div>
+        </div>
+    </body>
+    
+    </html>
